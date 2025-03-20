@@ -96,38 +96,84 @@ def round_to_nearest_hour(time_str, method="method1", is_end_time=False):
     return time_obj.replace(minute=0, second=0).strftime('%H:%M')
 
 # 处理排班表数据
+# def process_schedule_data(file_path, time_method):
+#     """
+#     目的：处理排班表数据
+#     输入：
+#         - file_path: Excel排班表文件路径（.xlsx）
+#         - time_method: 时间处理方法
+#     输出：处理后的DataFrame，包含列：
+#         - 日期、主播、上播时间、下播时间、主播人数
+#     """
+#     df0 = pd.read_excel(file_path)
+#     df0 = df0.replace({'（': '(', '）': ')'}, regex=True) #regex=True 允许你使用正则表达式进行更复杂的模式匹配和替换
+
+#     data = []
+#     # 遍历每行数据进行处理
+#     for i, row in df0.iterrows():
+#         date = row['Date']  # 获取日期
+#         for col in df0.columns[1:]:  # 从第二列开始遍历（第一个是日期列）
+#             anchors_and_times = extract_anchors_and_time_safe(row[col]) #[('张三',''),('','')]
+#             for anchor, time in anchors_and_times:
+#                 # 拆分多个主播名字（如果有多个，通过'+'分隔）
+#                 anchor_list = anchor.split('+') #以列表形式返回['张三', '李四']
+#                 num_anchors = len(anchor_list)  #计算主播人数
+#                 # 分割时间段并进行处理
+#                 start_time, end_time = time.split('-') #['20:00', '24:00']
+#                 # 分别处理开始时间和结束时间
+#                 start_time_rounded = round_to_nearest_hour(start_time, 
+#                                                          time_method, 
+#                                                          is_end_time=False)
+#                 end_time_rounded = round_to_nearest_hour(end_time, 
+#                                                        time_method, 
+#                                                        is_end_time=True)
+
+#                 for single_anchor in anchor_list:
+#                     # 处理跨日期的时间段
+#                     start_datetime = datetime.combine(date, datetime.strptime(start_time_rounded, '%H:%M').time()) #2025-02-16 20:00:00
+#                     end_datetime = datetime.combine(date, datetime.strptime(end_time_rounded, '%H:%M').time()) #2025-02-16 00:00:00
+
+#                     # 如果结束时间小于开始时间，说明是跨日期的情况
+#                     if end_datetime < start_datetime:
+#                         end_datetime += timedelta(days=1)  # 将结束时间加一天
+#                     # 将处理后的数据添加到列表中
+#                     data.append([date, single_anchor.strip(), start_datetime, end_datetime, num_anchors])
+
+#     # 创建新的 DataFrame
+#     new_df = pd.DataFrame(data, columns=['日期', '主播', '上播时间', '下播时间', '主播人数'])
+#     # 将上播时间和下播时间转换为 datetime 类型
+#     new_df['上播时间'] = pd.to_datetime(new_df['上播时间'])
+#     new_df['下播时间'] = pd.to_datetime(new_df['下播时间'])
+#     # 返回处理后的数据
+#     return new_df
+
 def process_schedule_data(file_path, time_method):
     """
     目的：处理排班表数据
-    输入：
-        - file_path: Excel排班表文件路径（.xlsx）
-        - time_method: 时间处理方法
-    输出：处理后的DataFrame，包含列：
-        - 日期、主播、上播时间、下播时间、主播人数
     """
     df0 = pd.read_excel(file_path)
-    df0 = df0.replace({'（': '(', '）': ')'}, regex=True) #regex=True 允许你使用正则表达式进行更复杂的模式匹配和替换
+    df0 = df0.replace({'（': '(', '）': ')'}, regex=True)
 
     data = []
-    # 遍历每行数据进行处理
     for i, row in df0.iterrows():
-        date = row['Date']  # 获取日期
-        for col in df0.columns[1:]:  # 从第二列开始遍历（第一个是日期列）
-            anchors_and_times = extract_anchors_and_time_safe(row[col]) #[('张三',''),('','')]
+        date = row['Date']
+        for col in df0.columns[1:]:
+            anchors_and_times = extract_anchors_and_time_safe(row[col])
             for anchor, time in anchors_and_times:
-                # 拆分多个主播名字（如果有多个，通过'+'分隔）
-                anchor_list = anchor.split('+') #以列表形式返回['张三', '李四']
-                num_anchors = len(anchor_list)  #计算主播人数
-                # 分割时间段并进行处理
-                start_time, end_time = time.split('-') #['20:00', '24:00']
-                # 分别处理开始时间和结束时间
-                start_time_rounded = round_to_nearest_hour(start_time, 
-                                                         time_method, 
-                                                         is_end_time=False)
-                end_time_rounded = round_to_nearest_hour(end_time, 
-                                                       time_method, 
-                                                       is_end_time=True)
-
+                try:
+                    anchor_list = anchor.split('+') #以列表形式返回['张三', '李四']
+                    num_anchors = len(anchor_list)  #计算主播人数
+                    start_time, end_time = time.split('-')
+                    # 添加调试信息
+                    start_time_rounded = round_to_nearest_hour(start_time.strip(), 
+                                                             time_method, 
+                                                             is_end_time=False)
+                    end_time_rounded = round_to_nearest_hour(end_time.strip(), 
+                                                           time_method, 
+                                                           is_end_time=True)
+                except Exception as e:
+                    print(f"错误的时间格式：{time}，主播：{anchor}，日期：{date}")
+                    raise e
                 for single_anchor in anchor_list:
                     # 处理跨日期的时间段
                     start_datetime = datetime.combine(date, datetime.strptime(start_time_rounded, '%H:%M').time()) #2025-02-16 20:00:00
@@ -147,6 +193,7 @@ def process_schedule_data(file_path, time_method):
     # 返回处理后的数据
     return new_df
 
+
 # 处理花费数据
 def process_expense_data(file_path):
     """
@@ -156,7 +203,8 @@ def process_expense_data(file_path):
     输出：处理后的DataFrame，包含列：
         - 日期、小时、花费（上小时到这小时的花费）、累积花费（按日期分组，从零点开始累计）
     """
-    df = pd.read_csv(file_path, encoding='GBK')
+    # df = pd.read_csv(file_path, encoding='utf-8')#天猫为GBK
+    df = pd.read_excel(file_path)#抖音为utf-8
     df['日期'] = pd.to_datetime(df['日期'])
 
     # 创建时间序列
@@ -227,7 +275,7 @@ def calculate_anchor_expenses(filtered_new_df, merged_df_new, start_date_input, 
 
     # 添加"数据起始时间"列
     summary['数据起始时间(含)'] = f"{start_date_input}"
-    summary['数据截止时间(不含)'] = f"{end_date_input}"
+    summary['数据截止时间(含)'] = f"{end_date_input}"
 
     # 返回处理后的数据
     return summary

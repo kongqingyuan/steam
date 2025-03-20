@@ -5,38 +5,43 @@ time_processing:
   #  "method2":（向后）大于30分钟向上取整，结束时间向上取整 (11:00-13:00)
   # "method3": （向前）大于30分钟向下取整，结束时间向下取整 (10:00-12:00)
   # "method4": （最长）大于30分钟向下取整，结束时间向上取整 (10:00-13:00)
-  method: "method4"
+  method: "method2"
 
 #天猫配置 
 tmall:
   date_range:
-    start_date: "2025-03-01"
-    end_date: "2025-03-11"
+    start_date: "2025-02-09"
+    end_date: "2025-02-28"
 
   input_files:
     schedule_file: "./天猫/天猫PY排班表.xlsx"
-    expense_file: "./天猫/天猫报表_20250209_20250310.csv"
+    expense_file: "./天猫/天猫PY报表.xlsx"
 
   output_file:
-    filename: "./天猫/output/主播花费统计0301_0311_4.xlsx"  
+    filename: "./天猫/output/主播花费统计0209_0228_4.xlsx"  
 
 # 抖音配置
+# 1.抖音奢美店
 douyin:
   date_range:
-    start_date: "2025-03-04"
-    end_date: "2025-03-05"
-# 抖音PY旗舰店
+    start_date: "2025-02-01"
+    end_date: "2025-02-15"
+
   input_files:
-    schedule_file: "./抖音/抖音PY旗舰店/抖音PY排班表.xlsx"
-    expense_file: "./抖音/抖音PY旗舰店/抖音报表_20250209_20250310.csv"
+    schedule_file: "./抖音/抖音奢美店/抖音奢美排班表.xlsx"
+    expense_file: "./抖音/抖音奢美店/抖音奢美报表.xlsx"
 
   output_file:
-    filename: "./抖音/抖音PY旗舰店/output/主播花费统计0304_0305_1.xlsx"
+    filename: "./抖音/抖音奢美店/output/抖音奢美主播花费统计0201_0215_2.xlsx"
 
-# 抖音PY旗舰店
+# 2.抖音PY旗舰店
+  # date_range:
+  #   start_date: "2025-02-01"
+  #   end_date: "2025-02-28"
+
   # input_files:
-  #   schedule_file: "./抖音/抖音奢美店/抖音奢美排班表.xlsx"
-  #   expense_file: "./抖音/抖音奢美店/抖音报表_20250209_20250310.csv"
+  #   schedule_file: "./抖音/抖音PY旗舰店/抖音PY排班表.xlsx"
+  #   expense_file: "./抖音/抖音PY旗舰店/抖音PY报表.xlsx"
 
   # output_file:
-    # filename: "./抖音/抖音奢美店/output/主播花费统计0304_0305_1.xlsx"
+  #   filename: "./抖音/抖音PY旗舰店/output/抖音PY主播花费统计201_0228_4.xlsx"
