@@ -3,7 +3,7 @@ import os
 import glob
 from datetime import datetime
 
-def merge_excel_files(files,output_file):
+def merge_excel_files(files,merge_file):
     """
     目的：合并指定目录下的所有抖音推广数据Excel文件
     输入：合并的文件，要输出的文件
@@ -38,13 +38,12 @@ def merge_excel_files(files,output_file):
     
     # 保存合并后的文件
     try:
-        merged_df.to_excel(output_file, index=False)
+        merged_df.to_excel(merge_file, index=False)
         print(f"\n合并完成！")
         print(f"总行数：{len(merged_df)}")
-        print(f"输出文件：{output_file}")
+        print(f"输出文件：{merge_file}")
     except Exception as e:
         print(f"保存合并文件时出错：{str(e)}")
-
 
 def data_process(file_path, output_file):
     """
@@ -68,14 +67,19 @@ def data_process(file_path, output_file):
     df.to_excel(output_file, index=False)
     print(f"处理完成，保存文件：{output_file}")
 
+def main():
+    path = ['./抖音/抖音奢美店', './抖音/抖音PY旗舰店']
+    # 合并文件(奢美)
+    files = f'{path[0]}/全域推广-投后数据-*.xlsx'
+    merge_file = f'{path[0]}/合并数据.xlsx'
+    merge_excel_files(files, merge_file)
 
-path = ['./抖音/抖音奢美店', '/抖音/抖音PY旗舰店']
-files = f'{path[0]}/全域推广-投后数据-*.xlsx'
-output_file = f'{path[0]}/合并数据.xlsx'
-merge_excel_files(files, output_file)
+    # 处理文件(奢美)
+    file_path = f'{path[0]}/合并数据.xlsx'
+    output_file = f'{path[0]}/抖音奢美报表.xlsx'
+    data_process(file_path,output_file)
 
+if __name__ == '__main__':
+    main()
 
-file_path = f'{path[0]}/合并数据.xlsx'
-output_file = f'{path[0]}/抖音奢美报表.xlsx'
-data_process(file_path,output_file)
 

@@ -261,7 +261,7 @@ def process_data(config,platform='tmall'):
     目的：处理指定平台的数据主流程
     输入：
         - config: 配置文件字典
-        - platform: 平台名称（'tmall'或'douyin'）
+        - platform: 平台名称（'tmall'或'douyinshemei'或'douyinpy'）
     输出：主播花费汇总DataFrame
     """
     platform_config = config[platform]
@@ -310,9 +310,9 @@ def main():
         parser = argparse.ArgumentParser(description='计算主播花费')
         parser.add_argument('--platform', 
                           type=str,
-                          choices=['tmall', 'douyin'],
+                          choices=['tmall', 'douyinshemei', 'douyinpy'],
                           default='tmall',
-                          help='选择平台：tmall 或 douyin')
+                          help='选择平台：tmall 或 douyinshemei 或 douyinpy')
         args = parser.parse_args()
         
         # 加载配置
@@ -337,4 +337,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# 终端运行：python main.py --platform douyin
+# 终端运行：python main.py --platform douyinshemei

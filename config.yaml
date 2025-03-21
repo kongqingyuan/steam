@@ -18,11 +18,11 @@ tmall:
     expense_file: "./天猫/天猫PY报表.xlsx"
 
   output_file:
-    filename: "./天猫/output/主播花费统计0209_0228_4.xlsx"  
+    filename: "./天猫/output/主播花费统计0209_0228_2.xlsx"  
 
 # 抖音配置
 # 1.抖音奢美店
-douyin:
+douyinshemei:
   date_range:
     start_date: "2025-02-01"
     end_date: "2025-02-15"
@@ -35,15 +35,16 @@ douyin:
     filename: "./抖音/抖音奢美店/output/抖音奢美主播花费统计0201_0215_2.xlsx"
 
 # 2.抖音PY旗舰店
-  # date_range:
-  #   start_date: "2025-02-01"
-  #   end_date: "2025-02-28"
+douyinpy:
+  date_range:
+    start_date: "2025-02-01"
+    end_date: "2025-02-28"
 
-  # input_files:
-  #   schedule_file: "./抖音/抖音PY旗舰店/抖音PY排班表.xlsx"
-  #   expense_file: "./抖音/抖音PY旗舰店/抖音PY报表.xlsx"
+  input_files:
+    schedule_file: "./抖音/抖音PY旗舰店/抖音PY排班表.xlsx"
+    expense_file: "./抖音/抖音PY旗舰店/抖音PY报表.xlsx"
 
-  # output_file:
-  #   filename: "./抖音/抖音PY旗舰店/output/抖音PY主播花费统计201_0228_4.xlsx"
+  output_file:
+    filename: "./抖音/抖音PY旗舰店/output/抖音PY主播花费统计201_0228_2.xlsx"
 
   
